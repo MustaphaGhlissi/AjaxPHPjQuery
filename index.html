@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+
+	<table id="matchs" class="table table-responsive table-striped">
+		<thead></thead>
+		<tbody></tbody>
+	</table>
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		
+		$(document).ready(function(){
+
+			var thead = "<tr>"+
+							"<th>Home Name</th><th>Away Name</th><th>Score</th><th>HT Score</th><th>FT Score</th><th>ET Score</th><th>"+"Time</th><th>Status</th><th>Added</th><th>Last Changed</th><th>League Name</th>"+
+						"</tr>";
+			
+			
+			function worker() {
+
+			 	$.ajax({
+				    type: "GET",
+				    url: "matchs.php",
+	  				dataType: 'json',
+
+				    success: function(response){
+				        
+				        var matchs = response.data.match;
+				        console.log(matchs);
+				        displayData(matchs);
+
+				    },
+				    complete: function() {
+				      	setTimeout(worker, 5000);
+				    }
+				 });
+			}
+
+			worker();
+
+
+			function displayData(matchs)
+			{	
+				$('#matchs thead').html("");
+				$('#matchs thead').append(thead);
+
+				$('#matchs tbody').html("");
+				$.each(matchs, function(key,value)
+		        {
+		        	var match = value;
+		        	
+		        	var tr = "<tr><td>"+match.home_name+"</td><td>"+match.away_name+"</td><td>"+match.score
+		        	+"</td><td>"+match.ht_score+"</td><td>"+match.ft_score+"</td><td>"+match.et_score
+		        	+"</td><td>"+match.time+"</td><td>"+match.status+"</td><td>"+match.added+"</td><td>"+match.last_changed
+		        	+"</td><td>"+match.league_name+"</td></tr>";
+
+		        	
+		        	$('#matchs tbody').append(tr);
+		        });
+			}	
+		});
+	</script>
+</body>
+</html>
